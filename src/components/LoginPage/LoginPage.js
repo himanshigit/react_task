@@ -1,7 +1,7 @@
 import React from 'react';
-import styles from './LoginPage.module.css';
-import EmployeeListPage from '../EmployeeListPage/EmployeeListPage';
+import {UserAuthenticationAction} from '../../action/UserAuthenticationAction';
 import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 const user = require("../../assets/Login.json")
 const email = user.username
@@ -32,6 +32,7 @@ class LoginPage extends React.Component {
     const passwordPattern = /[a-zA-Z]+[0-9]/;
     if(usernamePattern.test(username) && passwordPattern.test(password)){
       if(username == email && password == pass){
+        this.props.dispatch(UserAuthenticationAction(true));
         this.props.history.push({
           pathname: '/dashboardpage'
         })
@@ -63,4 +64,10 @@ class LoginPage extends React.Component {
   }
 }
 
-export default withRouter(LoginPage);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    UserAuthenticationAction: (userAuth) => { dispatch(UserAuthenticationAction(userAuth)); },
+  };
+ };
+
+export default withRouter(connect(mapDispatchToProps)(LoginPage));

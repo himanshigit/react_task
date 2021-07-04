@@ -1,23 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
 import LoginPage from './components/LoginPage/LoginPage';
 import EmployeeListPage from './components/EmployeeListPage/EmployeeListPage';
 import { HashRouter, Route, Redirect } from "react-router-dom";
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import EmployeeListReducer from "./reducer/EmployeeListReducer";
+import { connect } from 'react-redux';
 
-const store = createStore(EmployeeListReducer)
-function App() {
+function App(props) {
   return (
-    <Provider store={store}>
       <HashRouter>
         <Route path="/loginpage" component={LoginPage}/>
-        <Route path="/dashboardpage" component={EmployeeListPage}/>
+        {
+          props.userAuth ? (<Route path="/dashboardpage" component={EmployeeListPage}/>) : (<Route path="/dashboardpage"><Redirect to="/loginpage"/></Route>)
+        }
         <Redirect from="/" to="/loginpage"/>
       </HashRouter>
-    </Provider>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    userAuth: state.UserAuthenticatedReducer.isUserAuthenticated
+  }
+}
+
+export default connect(mapStateToProps)(App);

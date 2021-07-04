@@ -2,9 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 class EmployeeListPage extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     let employeesList = this.props.employees
@@ -43,7 +40,7 @@ class EmployeeListPage extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    employees: state.employeesList
+    employees: state.EmployeeListReducer.employeesList
   }
 }
 
