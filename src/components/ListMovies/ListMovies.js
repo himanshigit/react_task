@@ -15,7 +15,7 @@ import Button from '@material-ui/core/Button';
 import Rating from '@material-ui/lab/Rating';
 import CancelIcon from '@material-ui/icons/Cancel';
 
-const favourites = [];
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -131,6 +131,7 @@ const ListMovies = () => {
   const [anchor, setAnchor] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [rating, setRating] = useState(0);
+  const [favourites, setFavourites] = useState([]);
   const [comment, setComment] = useState('');
 
   const handleClick = (event,key) => {
@@ -143,7 +144,7 @@ const ListMovies = () => {
     values[key].favourite=true;
     values[key].rating=rating;
     values[key].comments=comment;
-    favourites.includes(values[key]) ? console.log(true) : favourites.push(values[key]);
+    favourites.includes(values[key]) ? console.log(true) : setFavourites(favourites.concat(values[key]));
     setComment('');
     setRating(0);
     setValues(values);
@@ -165,7 +166,8 @@ const ListMovies = () => {
   }
 
   const handleFavourite = function(key){
-    favourites.pop(key);
+    favourites.splice(key,1);
+    setFavourites([...favourites]);
   }
 
 
