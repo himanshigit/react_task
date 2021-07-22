@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -156,7 +156,7 @@ const ListMovies = () => {
     let url = 'https://omdbapi.com/?s='+event.target.value+'&apikey=a988130c&type=movie&page=1';
     fetch(url).then(res => res.json()).then(
       (result) => {
-        result.Search != undefined ?
+        result.Search !== undefined ?
         setValues(result.Search.map(item=> { return {...item, favourite : false, rating: 0, comments: ""}})) : setValues([])
         setCount(Math.round(result.totalResults/10))
         setSearchResult(event.target.value)
@@ -173,7 +173,7 @@ const ListMovies = () => {
     let url = 'https://omdbapi.com/?s='+searchResult+'&apikey=a988130c&type=movie&page='+event.target.textContent;
     fetch(url).then(res => res.json()).then(
       (result) => {
-        result.Search != undefined ?
+        result.Search !== undefined ?
         setValues(result.Search) : setValues([])
       }
     );

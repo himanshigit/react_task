@@ -2,7 +2,6 @@ import React from 'react';
 import {UserAuthenticationAction} from '../../action/UserAuthenticationAction';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { debounce } from 'lodash';
 
 const user = require("../../assets/Login.json");
 const email = user.username;
@@ -44,10 +43,10 @@ class LoginPage extends React.Component {
   handleSubmit(event) {
     let username = this.state.username;
     let password = this.state.password;
-    const usernamePattern = /[a-zA-Z0-9]+[\.]?([a-zA-Z0-9]+)?[\@][a-z]{3,9}[\.][a-z]{2,5}/g;
+    const usernamePattern = /[a-zA-Z0-9]+[.]?([a-zA-Z0-9]+)?[@][a-z]{3,9}[.][a-z]{2,5}/g;
     const passwordPattern = /[a-zA-Z]+[0-9]/;
     if(usernamePattern.test(username) && passwordPattern.test(password)){
-      if(username == email && password == pass){
+      if(username === email && password === pass){
         this.props.UserAuthenticationAction(true);
         this.props.history.push({
           pathname: '/dashboardpage'
