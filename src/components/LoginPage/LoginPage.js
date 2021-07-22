@@ -2,10 +2,12 @@ import React from 'react';
 import {UserAuthenticationAction} from '../../action/UserAuthenticationAction';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { debounce } from 'lodash';
 
-const user = require("../../assets/Login.json")
-const email = user.username
-const pass  = user.password
+const user = require("../../assets/Login.json");
+const email = user.username;
+const pass  = user.password;
+var _ = require('lodash');
 class LoginPage extends React.Component {
   constructor(props) {
     super(props);
@@ -17,11 +19,25 @@ class LoginPage extends React.Component {
   }
 
   handleUsernameChange(event) {
-    this.setState({username: event.target.value});
+    event.persist();
+    if(!this.debouncedUsernameFn){
+      this.debouncedUsernameFn =  _.debounce(() => {
+        this.setState({username: event.target.value});
+     }, 1000)
+    }
+
+    this.debouncedUsernameFn();
   }
 
   handlePasswordChange(event) {
-    this.setState({password: event.target.value});
+    event.persist();
+    if(!this.debouncedPasswordFn){
+      this.debouncedPasswordFn =  _.debounce(() => {
+        this.setState({password: event.target.value});
+     }, 1000)
+    }
+
+    this.debouncedPasswordFn();
     
   }
 
@@ -32,7 +48,7 @@ class LoginPage extends React.Component {
     const passwordPattern = /[a-zA-Z]+[0-9]/;
     if(usernamePattern.test(username) && passwordPattern.test(password)){
       if(username == email && password == pass){
-        this.props.dispatch(UserAuthenticationAction(true));
+        this.props.UserAuthenticationAction(true);
         this.props.history.push({
           pathname: '/dashboardpage'
         })
@@ -52,11 +68,11 @@ class LoginPage extends React.Component {
       <form onSubmit={this.handleSubmit}>
         <label>
           Username:
-          <input type="text" value={this.state.username} onChange={this.handleUsernameChange} />
+          <input type="text" onChange={this.handleUsernameChange} />
         </label>
         <label>
           Password:
-          <input type="text" value={this.state.password} onChange={this.handlePasswordChange} />
+          <input type="text" onChange={this.handlePasswordChange} />
         </label>
         <input type="submit" value="Submit" />
       </form>
@@ -70,4 +86,4 @@ const mapDispatchToProps = (dispatch) => {
   };
  };
 
-export default withRouter(connect(mapDispatchToProps)(LoginPage));
+export default withRouter(connect(null,mapDispatchToProps)(LoginPage));
